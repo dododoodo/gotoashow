@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:4000/kcisa';
+const API_BASE_URL = `'${process.env.REACT_APP_API_URL}/kcisa'`;
 const SERVICE_KEY = '356b0d91-82e9-43e0-b690-b78a982ec774';
 
 function useSearchResults(keyword) {
@@ -37,9 +37,6 @@ function useSearchResults(keyword) {
         const filteredItems = items.filter(item =>
           item.TITLE?.toLowerCase().includes(keyword.toLowerCase())
         );
-        
-        console.log("🔍 필터된 원본 item:", filteredItems);
-
         const processedItems = filteredItems.map(item => ({
           title: item.TITLE || '제목 없음',
           image: item.IMAGE_OBJECT || null,
