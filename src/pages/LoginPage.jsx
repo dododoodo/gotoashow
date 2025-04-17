@@ -1,68 +1,112 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/onboarding.scss';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import "../styles/onboarding.scss";
+
+// image import
+import prevBtn from "../images/public_prev_01.png";
+import starIcon from '../images/search_star_01.png';
+import filledStar from '../images/myshows_star_01.png';
 
 function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
-    function loginSubmit(e) {
-        e.preventDefault();
-        // 로컬스토리지에 저장된 유저 데이터 가져오기
-        const savedUserData = localStorage.getItem('userData');
-
-        // 저장된 정보 없으면
-        if (!savedUserData) {
-            alert('회원가입된 계정이 없습니다. 먼저 회원가입을 진행해주세요.');
-            return;
-        }
-        // 저장된 데이터 문자로 바꾸기
-        const userData = JSON.parse(savedUserData);
-
-        if (email === userData.email && password === userData.password) {
-            // 세션스토리지에 로그인 상태 유무를 저장
-            sessionStorage.setItem('isLoggedIn', 'true');
-            alert('로그인 성공!');
-            navigate('/');
-        } else {
-            alert('이메일 또는 비밀번호가 올바르지 않습니다.');
-        }
-    };
-
-    // 이전 버튼
-    function prev() {
-        navigate('/onboarding')
+  function loginSubmit(e) {
+    e.preventDefault();
+  
+    if (!email && !password) {
+      setErrorMessage("정보를 입력하지 않았습니다.");
+      setTimeout(() => setErrorMessage(false), 2000);
+      return;
     }
+  
+    if (!email || !password) {
+      setErrorMessage("이메일과 비밀번호를 입력해주세요.");
+      setTimeout(() => setErrorMessage(""), 2000);
+      return;
+    }
+  
+    const savedUsers = JSON.parse(localStorage.getItem("users")) || [];
 
-    return (
-        <div>
-            <div className="login-container">
-                <button onClick={prev}>이전</button>
-
-                <h2>로그인</h2>
-                <form onSubmit={loginSubmit}>
-                    <input 
-                        type="email" 
-                        placeholder="이메일을 입력해주세요." 
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)} 
-                        required
-                    />
-
-                    <input 
-                        type="password" 
-                        placeholder="비밀번호를 입력해주세요." 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)} 
-                        required
-                    />
-
-                    <button type="submit">로그인</button>
-                </form>
-            </div>
-        </div>
+    const foundUser = savedUsers.find(
+      (user) => user.email === email && user.password === password
     );
-};
+  
+    if (foundUser) {
+      const userName = foundUser.nickname || foundUser.name || "사용자";
+  
+      localStorage.setItem("userName", userName);
+      sessionStorage.setItem("user", JSON.stringify({ nickname: userName }));
+      sessionStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("currentUser", JSON.stringify(foundUser));
+
+  
+      navigate("/home");
+    } else {
+      setErrorMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
+      setTimeout(() => setErrorMessage(""), 2000);
+    }
+  }
+  
+  
+
+  function prev() {
+    navigate("/onboarding");
+  }
+
+  return (
+    <div className="total_container">
+      <header>
+        <button onClick={prev}>
+          <img src={prevBtn} alt="이전 버튼" />
+        </button>
+        <span>로그인</span>
+      </header>
+
+      <div className="login_container">
+        <form onSubmit={loginSubmit}>
+          <p>
+            이메일<span className="required">*</span>
+          </p>
+          <input
+            type="email"
+            placeholder="이메일을 입력해주세요."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <p>
+            비밀번호<span className="required">*</span>
+          </p>
+          <input
+            type="password"
+            placeholder="비밀번호를 입력해주세요."
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <AnimatePresence>
+            {errorMessage && (
+              <motion.div
+                className="error-message"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+              아이디 또는 비밀번호가 일치하지 않습니다.
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <button type="submit">로그인</button>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 export default LoginPage;

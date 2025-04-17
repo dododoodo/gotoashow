@@ -6,7 +6,13 @@ import SearchPage from "../pages/SearchPage";
 import MyShowsPage from "../pages/MyShowsPage";
 import MyPage from "../pages/MyPage";
 import LoginPage from "../pages/LoginPage";
-import SignUpPage from "../pages/SignUpPage";
+import SignUpPage from "../pages/join/SignUpPage";
+import TermsPage from "../pages/join/TermsPage";
+import Redirect from '../kakao/Redirect';
+import Callback from '../naver/Callback';
+import SuccessPage from "../pages/join/SuccessPage";
+import ContentsPage from "../pages/ContentsPage";
+import CategoryPage from "../pages/CategoryPage";
 
 function AppRouter() {
     const navigate = useNavigate();
@@ -24,8 +30,16 @@ function AppRouter() {
                 <Routes>
                     <Route path="/onboarding" element={<OnboardingPage />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path='/kakao/redirect' element={ <Redirect/> }/>
+                    <Route path='/naver/callback' element={ <Callback/> }/>
                     <Route path="/signup" element={<SignUpPage />} />
-                    <Route path="/" element={<MainPage />} />
+                    <Route path="/terms" element={<TermsPage />} />
+                    <Route path="/success" element={<SuccessPage />} />
+                    <Route path="/contents" element={<ContentsPage />} />
+                    <Route path="/category" element={<CategoryPage />} />
+                    
+
+                    <Route path="/home" element={<MainPage />} />
                     <Route path="/search" element={<SearchPage />} />
                     <Route path="/myshows" element={<MyShowsPage />} />
                     <Route path="/mypage" element={<MyPage />} />
