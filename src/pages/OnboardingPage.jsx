@@ -13,13 +13,13 @@ function OnboardingPage() {
     
     // ***Kakao Login
     const client_id = "f26d70de4f91fb13430539fe82bcebfc";
-    const redirect_uri = "http://localhost:3000/kakao/redirect";
+    const redirect_uri = "https://your-project.vercel.app/kakao/redirect";
     const response_type = "code";
     const url = `https://kauth.kakao.com/oauth/authorize`;
     
     // ***Naver Login
     const clientId = 'afiT5svJR3GguTViJBwY';
-    const callbackUrl = 'http://localhost:3000/naver/callback';
+    const callbackUrl = 'https://your-project.vercel.app/naver/callback';
 
     useEffect(() => {
         const isLoggedIn = sessionStorage.getItem('isLoggedIn');

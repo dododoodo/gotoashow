@@ -57,7 +57,7 @@ function MyPage() {
     const access_token = window.sessionStorage.getItem("access");
     if (access_token) {
       try {
-        await axios.post("http://localhost:4000/kakao/logout", { access_token });
+        await axios.post(`${process.env.REACT_APP_APIURL}/kakao/logout`, { access_token });
       } catch (error) {
         console.error("카카오 로그아웃 오류:", error);
       }

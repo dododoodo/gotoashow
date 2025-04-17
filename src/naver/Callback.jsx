@@ -9,7 +9,7 @@ function Callback() {
     useEffect(() => {
         axios({
             method:"get",
-            url:'http://localhost:4000/naver',
+            url: `${process.env.REACT_APP_APIURL}/naver`,
             params:{access_token}
         })
         .then(res => {
