@@ -14,7 +14,7 @@ function Redirect() {
     
         console.log("인가 코드:", code);
         
-        axios.get("https://show-server.vercel.app/kakao", { params: { code } })
+        axios.get(`${process.env.REACT_APP_APIURL}/kakao`, { params: { code } })
         .then((res) => {
             console.log("카카오 로그인 응답 데이터:", res.data);
             const { access_token, properties, kakao_account } = res.data;
